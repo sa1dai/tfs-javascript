@@ -1,0 +1,30 @@
+{
+  "name": "tinkoff_fintech_frontend_spb_2019",
+  "version": "1.0.0",
+  "description": "Homeworks for frontend part of tinkoff fintech school",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run lint && npm run unit-tests",
+    "lint": "npm run lint:es && npm run lint:css",
+    "lint:es": "eslint ./**/task.js",
+    "lint:es:fix": "eslint --fix ./**/task.js",
+    "lint:css": "stylelint ./**/*.css, ./**.css",
+    "unit-tests": "mocha --reporter=spec ./**/test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "eslint": "^4.6.1",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0",
+    "expect.js": "^0.3.1",
+    "mocha": "^3.5.0"
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.0.1",
+    "stylelint": "9.1.3",
+    "stylelint-config-standard": "18.2.0"
+  }
+}
