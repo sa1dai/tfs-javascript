@@ -6,8 +6,8 @@
   "scripts": {
     "test": "npm run lint && npm run unit-tests",
     "lint": "npm run lint:es && npm run lint:css",
-    "lint:es": "eslint ./**/task.js",
-    "lint:es:fix": "eslint --fix ./**/task.js",
+    "lint:es": "eslint ./**/tasks.js",
+    "lint:es:fix": "eslint --fix ./**/tasks.js",
     "lint:css": "stylelint ./**/*.css, ./**.css",
     "unit-tests": "mocha --reporter=spec ./**/test.js"
   },
