@@ -2,7 +2,7 @@
 
 ### Как выполнять задачи
 
-[См. презентацию](https://docs.google.com/presentation/d/19SpzqsVYM3L0121UaxpD-zKZdSeKzQmxthMVlGWiCSk/edit?usp=sharing)
+[См. презентацию](https://docs.google.com/presentation/d/1MlMx7JMIRnhrWrQDhFpjtvLPVc63Wu9Aw-Vnr6M0UYI/edit?usp=sharing)
 
 ### Установка
 
