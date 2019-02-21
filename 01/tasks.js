@@ -69,4 +69,4 @@ module.exports = {
   printNumbers,
   fibonacciSimple,
   fibonacciWithCache
-}
+};
