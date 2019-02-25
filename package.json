@@ -9,7 +9,7 @@
     "lint:es": "eslint ./**/tasks.js",
     "lint:es:fix": "eslint --fix ./**/tasks.js",
     "lint:css": "stylelint ./**/*.css, ./**.css",
-    "unit-tests": "mocha --reporter=spec ./**/test.js"
+    "unit-tests": "mocha --reporter=spec -w --reporter min ./**/test.js"
   },
   "author": "",
   "license": "ISC",
