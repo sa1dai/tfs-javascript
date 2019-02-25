@@ -1,3 +1,7 @@
+function isNumber(x) {
+  return !isNaN(parseInt(x, 10));
+}
+
 /**
  * найдите минимум и максимум в любой строке
  * @param  {string} string входная строка(числа отделены от других частей строки пробелами или знаками препинания)
@@ -16,7 +20,7 @@ function getMinMax(string) {
 
   if (words !== null) {
     words.forEach(word => {
-      if (!isNaN(parseInt(word, 10))) {
+      if (isNumber(word)) {
         numbers.push(parseFloat(word));
       }
     });
@@ -29,10 +33,6 @@ function getMinMax(string) {
 }
 
 /* ============================================= */
-
-function isNumber(x) {
-  return !isNaN(parseInt(x, 10));
-}
 
 /**
  * Напишите рекурсивную функцию вычисления чисел Фибоначчи
@@ -123,15 +123,7 @@ const fibonacciWithCache = memoize(
  * @return {(string|null)}
  */
 function printNumbers(max, cols) {
-  if (!isNumber(max) || !isNumber(cols)) {
-    return null;
-  }
-
-  if (!Number.isInteger(max) || !Number.isInteger(cols)) {
-    return null;
-  }
-
-  if (max < 0 || max > 99 || cols < 1) {
+  if (!correctArguments(max, cols)) {
     return null;
   }
 
@@ -139,42 +131,39 @@ function printNumbers(max, cols) {
   const p = (max + 1) % cols;
   // (max + 1) === (m * cols + p)
 
-  let result = '';
   let rows = m;
 
   if (p > 0) {
+    // TODO Ошибка от линтера: нельзя использовать ++, но разве тут это не уместно?
     rows++;
   }
 
+  return getResult(rows, cols, m, p);
+}
+
+function correctArguments(max, cols) {
+  if (!isNumber(max) || !isNumber(cols)) {
+    return false;
+  }
+
+  if (!Number.isInteger(max) || !Number.isInteger(cols)) {
+    return false;
+  }
+
+  return max >= 0 && max <= 99 && cols >= 1;
+}
+
+function getResult(rows, cols, m, p) {
+  let result = '';
+
   for (let i = 0; i < rows; i++) {
-    let row = '';
     let currentRowCols = cols;
 
     if (p > 0 && i === rows - 1) {
       currentRowCols = p;
     }
 
-    for (let j = 0; j < currentRowCols; j++) {
-      let multiplier = m;
-
-      if (p > 0 && j < p + 1) {
-        multiplier++;
-      }
-
-      const number = i + multiplier * j;
-
-      if (j > 0) {
-        row += ' ';
-      }
-
-      if (number < 10) {
-        row += ' ';
-      }
-
-      row += number;
-    }
-
-    result += row;
+    result += getRow(i, currentRowCols, m, p);
 
     if (i < rows - 1) {
       result += '\n';
@@ -182,6 +171,32 @@ function printNumbers(max, cols) {
   }
 
   return result;
+}
+
+function getRow(rowIndex, cols, m, p) {
+  let row = '';
+
+  for (let j = 0; j < cols; j++) {
+    let multiplier = m;
+
+    if (p > 0 && j < p + 1) {
+      multiplier++;
+    }
+
+    const number = rowIndex + multiplier * j;
+
+    if (j > 0) {
+      row += ' ';
+    }
+
+    if (number < 10) {
+      row += ' ';
+    }
+
+    row += number;
+  }
+
+  return row;
 }
 
 /* ============================================= */
