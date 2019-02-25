@@ -211,28 +211,38 @@ function rle(input) {
     return null;
   }
 
-  let i = 0;
   let result = '';
+  let prevChar = '';
+  let prevCharCount = null;
 
-  while (i < input.length) {
+  for (let i = 0; i < input.length; i++) {
     const char = input[i];
-    let charCount = 1;
 
-    while ((i + 1) < input.length && (input[i + 1] === char)) {
-      charCount++;
-      i++;
+    if (char !== prevChar) {
+      result += getRLEStr(prevChar, prevCharCount);
+
+      prevChar = char;
+      prevCharCount = 1;
+    } else {
+      prevCharCount++;
     }
 
-    i++;
-
-    result += char;
-
-    if (charCount > 1) {
-      result += charCount;
+    if (i === input.length - 1) {
+      result += getRLEStr(prevChar, prevCharCount);
     }
   }
 
   return result;
+}
+
+function getRLEStr(char, charCount) {
+  let str = char;
+
+  if (charCount > 1) {
+    str += charCount;
+  }
+
+  return str;
 }
 
 module.exports = {
