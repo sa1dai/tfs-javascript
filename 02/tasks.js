@@ -1,13 +1,41 @@
+/* eslint-disable no-console */
 /**
  * Исправьте проблему с таймером: должны выводиться числа от 0 до 9.
  * Доп. задание: предложите несколько вариантов решения.
  */
 function timer(logger = console.log) {
-    for (var i = 0; i < 10; i++) {
-        setTimeout(() => {
-            logger(i);
-        }, 100);
-    }
+  for (let i = 0; i < 10; i++) {
+    setTimeout(() => {
+      logger(i);
+    }, 100);
+  }
+}
+
+function timerSecondSolution(logger = console.log) {
+  // noinspection ES6ConvertVarToLetConst
+  for (var i = 0; i < 10; i++) { // eslint-disable-line no-var
+    // eslint-disable-next-line no-loop-func
+    (() => {
+      // noinspection ES6ConvertVarToLetConst
+      var j = i; // eslint-disable-line no-var
+
+      setTimeout(() => {
+        logger(j);
+      }, 100);
+    })();
+  }
+}
+
+function timerThirdSolution(logger = console.log) {
+  // noinspection ES6ConvertVarToLetConst
+  for (var i = 0; i < 10; i++) { // eslint-disable-line no-var
+    // eslint-disable-next-line no-shadow
+    (i => {
+      setTimeout(() => {
+        logger(i);
+      }, 100);
+    })(i);
+  }
 }
 
 /*= ============================================ */
@@ -20,7 +48,7 @@ function timer(logger = console.log) {
  * @return {Function} функция с нужным контекстом
  */
 function customBind(func, context, ...args) {
-
+  return (...otherArgs) => func.apply(context, [...args].concat([...otherArgs]));
 }
 
 /*= ============================================ */
@@ -33,7 +61,22 @@ function customBind(func, context, ...args) {
  * sum :: void -> Number
  */
 function sum(x) {
+  if (!x) {
     return 0;
+  }
+
+  let sum = x; // eslint-disable-line no-shadow
+
+  const inner = y => {
+    if (y) {
+      sum += y;
+      return inner;
+    }
+
+    return sum;
+  };
+
+  return inner;
 }
 
 /*= ============================================ */
@@ -45,7 +88,25 @@ function sum(x) {
  * @return {boolean}
  */
 function anagram(first, second) {
+  if (first.length !== second.length) {
     return false;
+  }
+
+  const secondArray = [...second];
+
+  for (let i = 0; i < first; i++) {
+    // TODO Почему это предупреждение срабатывает здесь?
+    // noinspection JSCheckFunctionSignatures
+    const charIndexInSecond = secondArray.indexOf(first[i]);
+
+    if (charIndexInSecond === -1) {
+      return false;
+    }
+
+    secondArray.splice(charIndexInSecond, 1);
+  }
+
+  return true;
 }
 
 /*= ============================================ */
@@ -53,21 +114,46 @@ function anagram(first, second) {
 /**
  * Сократите массив чисел до набора уникальных значений
  * [1, 1, 2, 6, 3, 6, 2] → [1, 2, 3, 6]
- * @param {Array<number>} исходный массив
+ * @param {Array<number>} arr исходный массив
  * @return {Array<number>} массив уникальных значений, отсортированный по возрастанию
  */
 function getUnique(arr) {
-    return [];
+  arr.sort((a, b) => a - b);
+
+  const uniqueArr = [];
+  let previousNumber = null;
+
+  arr.forEach(number => {
+    if (number !== previousNumber) {
+      uniqueArr.push(number);
+      previousNumber = number;
+    }
+  });
+
+  return uniqueArr;
 }
 
 /**
  * Найдите пересечение двух массивов
  * [1, 3, 5, 7, 9] и [1, 2, 3, 4] → [1, 3]
- * @param {Array<number>, Array<number>} first, second исходные массивы
+ * @param {Array<number>} first первый массив
+ * @param {Array<number>} second второй массив
  * @return {Array<number>} массив уникальных значений, отсортированный по возрастанию
  */
 function getIntersection(first, second) {
-    return [];
+  first = getUnique(first); // eslint-disable-line no-param-reassign
+  second = getUnique(second); // eslint-disable-line no-param-reassign
+
+  const intersection = [];
+
+  // TODO Ты бы также написал? Можно написать за O(n log n)
+  first.forEach(number => {
+    if (second.indexOf(number) !== -1) {
+      intersection.push(number);
+    }
+  });
+
+  return intersection;
 }
 
 /* ============================================= */
@@ -86,15 +172,33 @@ function getIntersection(first, second) {
  * @return {boolean}
  */
 function isIsomorphic(left, right) {
+  if (left.length !== right.length) {
+    return false;
+  }
 
+  let diffNumber = 0;
+
+  for (let i = 0; i < left.length; i++) {
+    if (left[i] !== right[i]) {
+      diffNumber++; // eslint-disable-line no-plusplus
+    }
+
+    if (diffNumber > 1) {
+      break;
+    }
+  }
+
+  return diffNumber <= 1;
 }
 
 module.exports = {
-    timer,
-    customBind,
-    sum,
-    anagram,
-    getUnique,
-    getIntersection,
-    isIsomorphic
+  timer,
+  timerSecondSolution,
+  timerThirdSolution,
+  customBind,
+  sum,
+  anagram,
+  getUnique,
+  getIntersection,
+  isIsomorphic
 };

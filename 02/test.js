@@ -1,5 +1,5 @@
 const expect = require('expect.js');
-const { timer, customBind, sum, anagram, getUnique, getIntersection, isIsomorphic } = require('./tasks');
+const { timer, timerSecondSolution, timerThirdSolution, customBind, sum, anagram, getUnique, getIntersection, isIsomorphic } = require('./tasks');
 
 describe('Lesson 2', () => {
     describe('timer', () => {
@@ -8,6 +8,32 @@ describe('Lesson 2', () => {
             const logger = num => result.push(num);
 
             timer(logger);
+            setTimeout(() => {
+                expect(result).to.eql(new Array(10).fill(10).map((_, i)=> i));
+                done();
+            }, 1000);
+        });
+    });
+
+    describe('timer second solution', () => {
+        it('should log different numbers', done => {
+            const result = [];
+            const logger = num => result.push(num);
+
+            timerSecondSolution(logger);
+            setTimeout(() => {
+                expect(result).to.eql(new Array(10).fill(10).map((_, i)=> i));
+                done();
+            }, 1000);
+        });
+    });
+
+    describe('timer third solution', () => {
+        it('should log different numbers', done => {
+            const result = [];
+            const logger = num => result.push(num);
+
+            timerThirdSolution(logger);
             setTimeout(() => {
                 expect(result).to.eql(new Array(10).fill(10).map((_, i)=> i));
                 done();

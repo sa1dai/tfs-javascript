@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 function isNumber(x) {
   return !isNaN(parseInt(x, 10));
 }
@@ -134,7 +135,7 @@ function printNumbers(max, cols) {
   let rows = m;
 
   if (p > 0) {
-    // TODO Ошибка от линтера: нельзя использовать ++, но разве тут это не уместно?
+    // eslint-disable-next-line no-plusplus
     rows++;
   }
 
@@ -153,6 +154,7 @@ function correctArguments(max, cols) {
   return max >= 0 && max <= 99 && cols >= 1;
 }
 
+// eslint-disable-next-line max-params
 function getResult(rows, cols, m, p) {
   let result = '';
 
@@ -173,6 +175,7 @@ function getResult(rows, cols, m, p) {
   return result;
 }
 
+// eslint-disable-next-line max-params
 function getRow(rowIndex, cols, m, p) {
   let row = '';
 
@@ -180,6 +183,7 @@ function getRow(rowIndex, cols, m, p) {
     let multiplier = m;
 
     if (p > 0 && j < p + 1) {
+      // eslint-disable-next-line no-plusplus
       multiplier++;
     }
 
@@ -201,6 +205,7 @@ function getRow(rowIndex, cols, m, p) {
 
 /* ============================================= */
 
+// noinspection SpellCheckingInspection
 /**
  * Реализуйте RLE-сжатие: AAAB -> A3B, BCCDDDEEEE -> BC2D3E4
  * @param  {string} input
@@ -224,6 +229,7 @@ function rle(input) {
       prevChar = char;
       prevCharCount = 1;
     } else {
+      // eslint-disable-next-line no-plusplus
       prevCharCount++;
     }
 
