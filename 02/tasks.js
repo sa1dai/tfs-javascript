@@ -48,7 +48,7 @@ function timerThirdSolution(logger = console.log) {
  * @return {Function} функция с нужным контекстом
  */
 function customBind(func, context, ...args) {
-  return (...otherArgs) => func.apply(context, [...args].concat([...otherArgs]));
+  return (...otherArgs) => func.apply(context, args.concat(otherArgs));
 }
 
 /*= ============================================ */
@@ -65,15 +65,15 @@ function sum(x) {
     return 0;
   }
 
-  let sum = x; // eslint-disable-line no-shadow
+  let result = x;
 
   const inner = y => {
     if (y) {
-      sum += y;
+      result += y;
       return inner;
     }
 
-    return sum;
+    return result;
   };
 
   return inner;
@@ -95,8 +95,6 @@ function anagram(first, second) {
   const secondArray = [...second];
 
   for (let i = 0; i < first; i++) {
-    // TODO Почему это предупреждение срабатывает здесь?
-    // noinspection JSCheckFunctionSignatures
     const charIndexInSecond = secondArray.indexOf(first[i]);
 
     if (charIndexInSecond === -1) {
@@ -146,12 +144,11 @@ function getIntersection(first, second) {
 
   const intersection = [];
 
-  // TODO Ты бы также написал? Можно написать за O(n log n)
-  first.forEach(number => {
-    if (second.indexOf(number) !== -1) {
-      intersection.push(number);
+  for (let i = 0; i < first.length; i++) {
+    if (second.indexOf(first[i]) !== -1) {
+      intersection.push(first[i]);
     }
-  });
+  }
 
   return intersection;
 }
@@ -184,11 +181,11 @@ function isIsomorphic(left, right) {
     }
 
     if (diffNumber > 1) {
-      break;
+      return false;
     }
   }
 
-  return diffNumber <= 1;
+  return true;
 }
 
 module.exports = {
