@@ -29,10 +29,9 @@ function timerSecondSolution(logger = console.log) {
 function timerThirdSolution(logger = console.log) {
   // noinspection ES6ConvertVarToLetConst
   for (var i = 0; i < 10; i++) { // eslint-disable-line no-var
-    // eslint-disable-next-line no-shadow
-    (i => {
+    (j => {
       setTimeout(() => {
-        logger(i);
+        logger(j);
       }, 100);
     })(i);
   }
