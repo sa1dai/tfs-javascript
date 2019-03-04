@@ -138,14 +138,12 @@ function getUnique(arr) {
  * @return {Array<number>} массив уникальных значений, отсортированный по возрастанию
  */
 function getIntersection(first, second) {
-  first = getUnique(first); // eslint-disable-line no-param-reassign
-  second = getUnique(second); // eslint-disable-line no-param-reassign
-
+  const firstUniqueOnly = getUnique(first);
   const intersection = [];
 
-  for (let i = 0; i < first.length; i++) {
-    if (second.indexOf(first[i]) !== -1) {
-      intersection.push(first[i]);
+  for (let i = 0; i < firstUniqueOnly.length; i++) {
+    if (second.indexOf(firstUniqueOnly[i]) !== -1) {
+      intersection.push(firstUniqueOnly[i]);
     }
   }
 
