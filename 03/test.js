@@ -162,4 +162,18 @@ describe('Lesson 3', () => {
     });
 
   });
+
+  describe('Roman range', () => {
+    it('0..II', () => {
+      expect(0..IV).to.eql([0, 1, 2, 3, 4]);
+    });
+
+    it('5..V', () => {
+      expect(5..V).to.eql([5]);
+    });
+
+    it('10..VI', () => {
+      expect(10..VI).to.eql([]);
+    });
+  });
 });
