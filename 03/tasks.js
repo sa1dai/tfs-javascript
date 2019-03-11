@@ -10,7 +10,15 @@
  */
 class NumberAndString {
   constructor(str) {
+    this.str = str;
+  }
 
+  toString() {
+    return this.str;
+  }
+
+  valueOf() {
+    return this.str.length;
   }
 }
 
@@ -25,7 +33,25 @@ class NumberAndString {
  * @return {Promise} промис с нужным поведением
  */
 function rejectOnTimeout(promise, timeoutInMilliseconds) {
-  return Promise.resolve(null);
+  let resolveValue = null;
+  let rejectValue = null;
+
+  promise.then(
+    value => resolveValue = value,
+    err => rejectValue = err
+  );
+
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (resolveValue !== null) {
+        resolve(resolveValue);
+      } else if (rejectValue !== null) {
+        reject(rejectValue);
+      } else {
+        reject('timeout_error');
+      }
+    }, timeoutInMilliseconds);
+  });
 }
 
 
@@ -37,9 +63,24 @@ function rejectOnTimeout(promise, timeoutInMilliseconds) {
  * @return {Promise}
  */
 function promiseAll(promises) {
-  return Promise.resolve(null);
-}
+  const results = [];
+  let completedPromises = 0;
 
+  return new Promise((resolve, reject) => {
+    promises.forEach((promise, index) => {
+      promise.then(value => {
+        results[index] = value;
+        completedPromises++;
+
+        if (completedPromises === promises.length) {
+          resolve(results);
+        }
+      }).catch(error => {
+        reject(error);
+      });
+    });
+  });
+}
 
 /**
  * Реализовать функцию, поведение которой аналогично поведению Promise.race,
@@ -47,9 +88,10 @@ function promiseAll(promises) {
  * @param {Array<Promise>} promises - массив с исходными промисами
  * @return {Promise}
  */
-
 function promiseRace(promises) {
-  return Promise.resolve(null);
+  return new Promise((resolve, reject) => {
+    promises.forEach(promise => promise.then(resolve).catch(reject));
+  });
 }
 
 
@@ -62,7 +104,52 @@ function promiseRace(promises) {
  * 5..X => [5, 6, 7, 8, 9]
  * Подсказка - необходимо использовать Proxy - объекты
  * */
+// eslint-disable-next-line no-proto
+Number.prototype.__proto__ = new Proxy({}, {
+  get(target, property, number) {
+    if (isRomanValue(property)) {
+      let arrayLength = parseIntFromRoman(property) - number + 1;
 
+      if (arrayLength < 0) {
+        arrayLength = 0;
+      }
+
+      return Array.from(new Array(arrayLength), (x, i) => i + number);
+    }
+
+    return target[property];
+  }
+});
+
+function isRomanValue(string) {
+  return /^[IVXLCDM]+$/.test(string);
+}
+
+function parseIntFromRoman(roman) {
+  const intFromRoman = {
+    I: 1,
+    V: 5,
+    X: 10,
+    L: 50,
+    C: 100,
+    D: 500,
+    M: 1000
+  };
+
+  let result = 0;
+
+  for (let i = 0; i < roman.length; i++) {
+    let sign = 1;
+
+    if (i + 1 < roman.length && intFromRoman[roman[i]] < intFromRoman[roman[i + 1]]) {
+      sign = -1;
+    }
+
+    result += sign * intFromRoman[roman[i]];
+  }
+
+  return result;
+}
 
 module.exports = {
   NumberAndString,
