@@ -33,24 +33,20 @@ class NumberAndString {
  * @return {Promise} промис с нужным поведением
  */
 function rejectOnTimeout(promise, timeoutInMilliseconds) {
-  let resolveValue = null;
-  let rejectValue = null;
-
-  promise.then(
-    value => resolveValue = value,
-    err => rejectValue = err
-  );
-
   return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (resolveValue !== null) {
-        resolve(resolveValue);
-      } else if (rejectValue !== null) {
-        reject(rejectValue);
-      } else {
-        reject('timeout_error');
-      }
+    const timer = setTimeout(() => {
+      reject('timeout_error');
     }, timeoutInMilliseconds);
+
+    promise
+      .then(res => {
+        clearTimeout(timer);
+        resolve(res);
+      })
+      .catch(err => {
+        clearTimeout(timer);
+        reject(err);
+      });
   });
 }
 
@@ -107,8 +103,10 @@ function promiseRace(promises) {
 // eslint-disable-next-line no-proto
 Number.prototype.__proto__ = new Proxy({}, {
   get(target, property, number) {
-    if (isRomanValue(property)) {
-      let arrayLength = parseIntFromRoman(property) - number + 1;
+    const upperBound = parseIntFromRoman(property);
+
+    if (upperBound) {
+      let arrayLength = upperBound - number + 1;
 
       if (arrayLength < 0) {
         arrayLength = 0;
@@ -121,20 +119,47 @@ Number.prototype.__proto__ = new Proxy({}, {
   }
 });
 
-function isRomanValue(string) {
-  return /^[IVXLCDM]+$/.test(string);
+const intFromRoman = {
+  I: 1,
+  V: 5,
+  X: 10,
+  L: 50,
+  C: 100,
+  D: 500,
+  M: 1000
+};
+
+function isRomanNumber(string) {
+  if (!/^[IVXLCDM]+$/.test(string)) {
+    return false;
+  }
+
+  const substrs = string.match(/(.)\1*/g);
+
+  for (let i = 0; i < substrs.length; i++) {
+    if (substrs[i].length > 3) {
+      return false;
+    }
+  }
+
+  const correctSubtractionPairs = ['IV', 'IX', 'XL', 'XC', 'CD', 'CM'];
+
+  for (let i = 0; i < string.length; i++) {
+    if (i + 1 < string.length
+      && intFromRoman[string[i]] < intFromRoman[string[i + 1]]
+      && !correctSubtractionPairs.includes(string[i] + string[i + 1])
+    ) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function parseIntFromRoman(roman) {
-  const intFromRoman = {
-    I: 1,
-    V: 5,
-    X: 10,
-    L: 50,
-    C: 100,
-    D: 500,
-    M: 1000
-  };
+  if (!isRomanNumber(roman)) {
+    return null;
+  }
 
   let result = 0;
 
