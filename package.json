@@ -10,7 +10,7 @@
     "lint:es:fix": "eslint --fix ./**/tasks.js",
     "lint:css": "stylelint ./**/*.css, ./**.css",
     "unit-tests": "mocha --reporter=spec ./**/test.js",
-    "unit-tests:watch": "mocha -w --reporter min ./**/test.js"
+    "unit-tests:watch": "mocha --watch --reporter=spec \"./!(node_modules)/**/**/test.js\""
   },
   "author": "",
   "license": "ISC",

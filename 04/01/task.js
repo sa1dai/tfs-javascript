@@ -10,10 +10,10 @@ phoneInput.addEventListener('focus', event => {
   setCursorPosition(event.target, getMaxAvailibleCursorPosition());
 });
 
-phoneInput.addEventListener('click', e => {
+phoneInput.addEventListener('click', event => {
   const cursorPosition = event.target.selectionStart;
 
-  setCursorPosition(e.target, correctCursorPositionAfterMouseClick(cursorPosition));
+  setCursorPosition(event.target, correctCursorPositionAfterMouseClick(cursorPosition));
 });
 
 phoneInput.addEventListener('keyup', event => {
@@ -49,16 +49,16 @@ phoneInput.addEventListener('keyup', event => {
   }
 });
 
-phoneInput.addEventListener('input', e => {
+phoneInput.addEventListener('input', event => {
   // noinspection JSUnresolvedVariable
   const cursorPosition = event.target.selectionStart;
 
   // noinspection JSUnresolvedVariable
-  switch (e.inputType) {
+  switch (event.inputType) {
     case 'insertText':
-      if (/^\d$/.test(e.data)) {
+      if (/^\d$/.test(event.data)) {
         // noinspection JSUnresolvedVariable
-        previousPhone = setCharAt(previousPhone, cursorPosition - 1, e.data);
+        previousPhone = setCharAt(previousPhone, cursorPosition - 1, event.data);
         setInputValue(event.target, previousPhone, correctCursorPositionAfterRightShift(cursorPosition));
         phoneDigitsCount++;
       } else {
